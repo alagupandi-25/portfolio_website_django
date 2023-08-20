@@ -2,7 +2,7 @@ import os
 import mimetypes
 from django.shortcuts import render
 from django.http.response import HttpResponse, HttpResponseRedirect
-from .models import Project,Skill
+from .models import Project, Skill, Experience, Education
 
 
 def index(request):
@@ -23,8 +23,12 @@ def project(request):
 
 def resume(request):
     skill_object = Skill.objects.filter(to_display=True)
+    experience_object = Experience.objects.filter(to_display=True)
+    education_object = Education.objects.filter(to_display=True)
     context = {
+        'education_object': education_object,
         'skill_object': skill_object,
+        'experience_object': experience_object,
     }
     return render(request, 'resume.html', context)
 

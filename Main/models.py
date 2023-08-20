@@ -20,11 +20,15 @@ class Experience(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     company = models.CharField(max_length=254, null=False, blank=False)
+    location = models.CharField(max_length=255, null=True, blank=True)
     position = models.CharField(max_length=254, null=False, blank=False)
     start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=True, blank=True)
     description = models.TextField()
     to_display = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Experience object {self.company} and position - {self.position}"
 
 
 class Education(models.Model):
@@ -32,11 +36,15 @@ class Education(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     institution = models.CharField(max_length=255, null=False, blank=False)
+    location = models.CharField(max_length=255, null=True, blank=True)
     degree = models.CharField(max_length=255)
     start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=True, blank=True)
     description = models.TextField()
     to_display = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Education object {self.institution} and degree - {self.degree}"
 
 
 class Skill(models.Model):
