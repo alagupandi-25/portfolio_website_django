@@ -1,8 +1,12 @@
 import os
 import mimetypes
-from django.shortcuts import render
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http import Http404
+from django.conf import settings
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
 from .models import Project, Skill, Experience, Education
+from django.http.response import HttpResponse, HttpResponseRedirect
+
 
 
 def index(request):
@@ -25,6 +29,7 @@ def resume(request):
     skill_object = Skill.objects.filter(to_display=True)
     experience_object = Experience.objects.filter(to_display=True)
     education_object = Education.objects.filter(to_display=True)
+
     context = {
         'education_object': education_object,
         'skill_object': skill_object,
@@ -47,3 +52,20 @@ def download_resume(request):
 
     else:
         return HttpResponseRedirect(request.path_info)
+
+
+def Send_mail(request):
+    try:
+        print(request.method)
+        print(request.POST)
+        subject = "Contact us Mail test"
+        message = "Test mail from you to you"
+        email_address = settings.EMAIL_HOST_USER
+        send_mail(subject, message, email_address, [email_address])
+
+        return redirect('contact')
+
+    except:
+        raise Http404
+
+
