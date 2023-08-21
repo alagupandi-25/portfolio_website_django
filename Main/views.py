@@ -8,7 +8,6 @@ from .models import Project, Skill, Experience, Education
 from django.http.response import HttpResponse, HttpResponseRedirect
 
 
-
 def index(request):
     return render(request, "index.html")
 
@@ -22,7 +21,7 @@ def project(request):
     context = {
         'project_object': project_object,
     }
-    return render(request, 'projects.html',context)
+    return render(request, 'projects.html', context)
 
 
 def resume(request):
@@ -56,16 +55,21 @@ def download_resume(request):
 
 def Send_mail(request):
     try:
-        print(request.method)
-        print(request.POST)
-        subject = "Contact us Mail test"
-        message = "Test mail from you to you"
-        email_address = settings.EMAIL_HOST_USER
-        send_mail(subject, message, email_address, [email_address])
+        if request.method == "POST":
+            sender = request.POST.get("name")
+            sender_email = request.POST.get("email")
+            sender_phone = request.POST.get("phone")
+            sender_message = request.POST.get("message")
+            subject = f"Contact us Mail form {sender} and email {sender_email}"
+            message = f"""\tSender name : {sender}\n
+                      Sender email : {sender_email}\n
+                      Sender phone : {sender_phone}\n\n
+                      Sender Message : {sender_message}"""
+            email_address = settings.EMAIL_HOST_USER
+            send_mail(subject, message, email_address, [email_address])
 
-        return redirect('contact')
-
+            return redirect('contact')
+        else:
+            raise Http404
     except:
         raise Http404
-
-
